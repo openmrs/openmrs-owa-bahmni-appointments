@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf ./dependencies ./dist",
-    "download": "download https://github.com/Bahmni/openmrs-module-appointment-frontend/releases/download/0.0.1-beta.1/openmrs-module-appointment-frontend.zip -o dependencies",
-    "unzip": "extract-zip ./dependencies/openmrs-module-appointment-frontend.zip",
+    "download": "download https://github.com/Bahmni/openmrs-module-appointments-frontend/releases/download/openmrs-refapp-support-0.0.1/openmrs-module-appointments-frontend.zip -o dependencies",
+    "unzip": "extract-zip ./dependencies/openmrs-module-appointments-frontend.zip",
     "copy": "cp -r ./src/ ./dist/",
-    "build": "npm run clean && npm run download && npm run unzip && npm run copy"
+    "zip": "mv dist openmrs-module-appointments-frontend && bestzip openmrs-module-appointments-frontend.zip openmrs-module-appointments-frontend",
+    "build": "npm run clean && npm run download && npm run unzip && npm run copy && npm run zip"
   },
   "dependencies": {},
   "keywords": [
@@ -20,6 +21,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "bestzip": "^2.1.5",
     "copy": "^0.3.2",
     "download-cli": "^1.1.1",
     "extract-zip": "^1.6.7",

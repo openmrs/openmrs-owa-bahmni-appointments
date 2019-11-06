@@ -1,0 +1,15 @@
+{
+    "package": {
+        "name": "openmrs-owa-bahmni-appointments",
+        "repo": "owa",
+        "subject": "openmrs"
+    },
+
+    "version": {
+        "name": "1.0.0",
+        "released": "2019-11-05"
+    },
+
+    "files":[{"includePattern": "./(.*\\.zip)", "uploadPattern": "$1"}],
+    "publish": true
+}
