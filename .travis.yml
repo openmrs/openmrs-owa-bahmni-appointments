@@ -12,3 +12,4 @@ deploy:
   on:
     tags: true
   key: $BINTRAY_API_KEY
+  skip_cleanup: true
