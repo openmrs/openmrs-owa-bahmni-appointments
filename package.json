@@ -8,7 +8,7 @@
     "download": "download https://github.com/Bahmni/openmrs-module-appointments-frontend/releases/download/0.0.1/openmrs-module-appointments-frontend.zip -o dependencies",
     "unzip": "extract-zip ./dependencies/openmrs-module-appointments-frontend.zip && rm -f ./dependencies/openmrs-module-appointments-frontend.zip",
     "copy": "cp -r ./src/* ./dist/",
-    "zip": "mv dist appointments && bestzip appointments-${npm_package_version}.zip appointments",
+    "zip": "mv dist appointments && cd appointments && bestzip ../appointments-${npm_package_version}.zip *",
     "build": "npm run clean && npm run download && npm run unzip && npm run copy && npm run zip"
   },
   "dependencies": {},
