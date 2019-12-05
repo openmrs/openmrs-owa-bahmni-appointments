@@ -41,56 +41,55 @@ Bahmni.Appointments.AppointmentStatusHandler = (function () {
     };
 
     const updateIfCurrentProviderInAppointment = function (statusAndProviderResponse, currentProviderUuid, appointment) {
-        const currentProviderInAppointment = _.find(statusAndProviderResponse.providers, provider => provider.uuid === currentProviderUuid);
-        if (!currentProviderInAppointment) return;
+        const clone = _.cloneDeep(statusAndProviderResponse);
+        const isCurrentProviderInAppointment = _.some(statusAndProviderResponse.providers, provider => provider.uuid === currentProviderUuid);
+        if (!isCurrentProviderInAppointment) return clone;
 
-        currentProviderInAppointment.response = providerResponses().ACCEPTED;
-        statusAndProviderResponse.status = getStatusForAppointment(appointment);
+        clone.status = getStatusForAppointment(appointment);
+        clone.providers = _.map(clone.providers, function (provider) {
+            const response = (provider.uuid === currentProviderUuid) ?
+                providerResponses().ACCEPTED : provider.response;
+            return {uuid: provider.uuid, response: response};
+        });
+        return clone;
     };
 
-    const handleRescheduledAppointment = function (statusAndProviderResponse, appointment, currentProviderUuid) {
-        //this is an special edit
+    const updateIfRescheduled = function (statusAndProviderResponse, appointment, currentProviderUuid) {
         // in this case we don't keep the existing appointment status and responses
-        statusAndProviderResponse.status = appointmentStatuses().Requested;
-        statusAndProviderResponse.providers = _.map(appointment.providers, function (provider) {
-            return {uuid: provider.uuid, response: providerResponses().AWAITING}
-        });
+        //this is an special edit
+        const clone = _.cloneDeep(statusAndProviderResponse);
+        const isCurrentProviderInAppointment = _.some(clone.providers, provider => provider.uuid === currentProviderUuid);
 
-        const currentProviderInAppointment = _.find(statusAndProviderResponse.providers, provider => provider.uuid === currentProviderUuid);
-        if (currentProviderInAppointment) {
-            statusAndProviderResponse.status = appointmentStatuses().Scheduled;
-            currentProviderInAppointment.response = providerResponses().ACCEPTED;
-        }
+        clone.status = isCurrentProviderInAppointment ? appointmentStatuses().Scheduled :
+            appointmentStatuses().Requested;
+        clone.providers = _.map(clone.providers, function (provider) {
+            const response = (provider.uuid === currentProviderUuid) ?
+                providerResponses().ACCEPTED : providerResponses().AWAITING;
+            return {uuid: provider.uuid, response: response};
+        });
+        return clone;
     };
 
     const updateIfAtleastOneProviderHasAccepted = function (statusAndProviderResponse) {
         //this handles special cases like,
         //  when new providers are added to a no provider appointment
         //  when only accepted provider is removed from appointment appointment
-        const hasAtleastOneAccept = _.some(statusAndProviderResponse.providers, function (provider) {
+
+        const clone = _.cloneDeep(statusAndProviderResponse);
+        const hasAtleastOneAccept = _.some(clone.providers, function (provider) {
             return provider.response === providerResponses().ACCEPTED;
         });
         if (hasAtleastOneAccept) {
-            if (isStatusRequested(statusAndProviderResponse.status)) {
-                statusAndProviderResponse.status = appointmentStatuses().Scheduled;
+            if (isStatusRequested(clone.status)) {
+                clone.status = appointmentStatuses().Scheduled;
             }
         } else {
-            if (isStatusScheduled(statusAndProviderResponse.status)) {
-                statusAndProviderResponse.status = appointmentStatuses().Requested;
+            if (isStatusScheduled(clone.status)) {
+                clone.status = appointmentStatuses().Requested;
             }
         }
+        return clone;
     };
-
-    const statusAndResponseForZeroProviders = function (appointment) {
-        const statusAndProviderResponse = {providers: []};
-        if (isNewAppointment(appointment) || isStatusRequested(appointment.status)) {
-            statusAndProviderResponse.status = appointmentStatuses().Scheduled;
-        } else {
-            statusAndProviderResponse.status = appointment.status;
-        }
-        return statusAndProviderResponse;
-    };
-
 
     const statusAndResponseForScheduledServices = function (appointment) {
         const statusAndProviderResponse = {};
@@ -119,13 +118,13 @@ Bahmni.Appointments.AppointmentStatusHandler = (function () {
         if (_.isEmpty(appointment.providers)) {
             return {status: getStatusForAppointment(appointment), providers:[]};
         }
-        const statusAndProviderResponse = statusAndResponseForRequestedServices(appointment, existingProvidersUuids);
+        let statusAndProviderResponse = statusAndResponseForRequestedServices(appointment, existingProvidersUuids);
 
-        updateIfCurrentProviderInAppointment(statusAndProviderResponse, currentProviderUuid, appointment);
-        updateIfAtleastOneProviderHasAccepted(statusAndProviderResponse);
+        statusAndProviderResponse = updateIfCurrentProviderInAppointment(statusAndProviderResponse, currentProviderUuid, appointment);
+        statusAndProviderResponse = updateIfAtleastOneProviderHasAccepted(statusAndProviderResponse);
 
         if (isRescheduled) {
-            handleRescheduledAppointment(statusAndProviderResponse, appointment, currentProviderUuid);
+            statusAndProviderResponse = updateIfRescheduled(statusAndProviderResponse, appointment, currentProviderUuid);
         }
         return statusAndProviderResponse;
     };
