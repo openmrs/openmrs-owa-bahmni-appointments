@@ -47,9 +47,7 @@ Bahmni.Appointments.AppointmentStatusHandler = (function () {
 
         clone.status = getStatusForAppointment(appointment);
         clone.providers = _.map(clone.providers, function (provider) {
-            const response = (provider.uuid === currentProviderUuid) ?
-                providerResponses().ACCEPTED : provider.response;
-            return {uuid: provider.uuid, response: response};
+            return {uuid: provider.uuid, response: providerResponses().ACCEPTED};
         });
         return clone;
     };
@@ -62,10 +60,9 @@ Bahmni.Appointments.AppointmentStatusHandler = (function () {
 
         clone.status = isCurrentProviderInAppointment ? appointmentStatuses().Scheduled :
             appointmentStatuses().Requested;
+        const responseForEveryProvider = isCurrentProviderInAppointment ? providerResponses().ACCEPTED : providerResponses().AWAITING;
         clone.providers = _.map(clone.providers, function (provider) {
-            const response = (provider.uuid === currentProviderUuid) ?
-                providerResponses().ACCEPTED : providerResponses().AWAITING;
-            return {uuid: provider.uuid, response: response};
+            return {uuid: provider.uuid, response: responseForEveryProvider};
         });
         return clone;
     };
@@ -116,7 +113,7 @@ Bahmni.Appointments.AppointmentStatusHandler = (function () {
             return statusAndResponseForScheduledServices(appointment);
         }
         if (_.isEmpty(appointment.providers)) {
-            return {status: getStatusForAppointment(appointment), providers:[]};
+            return {status: getStatusForAppointment(appointment), providers: []};
         }
         let statusAndProviderResponse = statusAndResponseForRequestedServices(appointment, existingProvidersUuids);
 
