@@ -21,7 +21,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "bestzip": "^2.1.5",
+    "bestzip": "^2.1.7",
     "copy": "^0.3.2",
     "download-cli": "^1.1.1",
     "extract-zip": "^1.6.7",
