@@ -1,7 +1,7 @@
 {
     "appointmentService": "/openmrs/ws/rest/v1/appointmentService",
     "patientUrl": "/openmrs/ws/rest/v1/patient",
-    "searchPatientUrl": "/openmrs/ws/rest/v1/bahmnicommons/search/patient",
+    "searchPatientUrl": "/openmrs/ws/rest/v1/appointments/search/patient",
     "servicesDefaultUrl": "/openmrs/ws/rest/v1/appointmentService/all/default",
     "providerUrl": "/openmrs/ws/rest/v1/provider",
     "providerParams": "v=custom:(display,person,uuid,retired,attributes:(attributeType:(display),value,voided))",
