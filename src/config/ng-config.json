@@ -86,7 +86,8 @@
       "openMRSSystemSettingUrl": "/openmrs/ws/rest/v1/systemsetting/",
       "baseLocaleURL": "./i18n/",
       "customLocaleURL": "/openmrs/frontend/bahmniapps/i18n/",
-      "loginPageUrl": "/openmrs/login.htm"
+      "loginPageUrl": "/openmrs/login.htm",
+      "appointmentsListPatientLink": "/openmrs/coreapps/clinicianfacing/patient.page?patientId={{patientId}}"
     }
   }
 }
