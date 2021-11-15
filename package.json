@@ -4,12 +4,11 @@
   "description": "Packages UI of bahmni appointments module as openmrs OWA",
   "main": "index.js",
   "scripts": {
-    "clean": "rimraf ./dependencies ./appointments",
-    "download": "download https://github.com/Bahmni/openmrs-module-appointments-frontend/releases/download/0.0.5/openmrs-module-appointments-frontend.zip -o dependencies",
-    "unzip": "extract-zip ./dependencies/openmrs-module-appointments-frontend.zip $INIT_CWD/dist && rm -f ./dependencies/openmrs-module-appointments-frontend.zip",
+    "clean": "rimraf ./appointments",
+    "unzip": "extract-zip ./dependencies/openmrs-module-appointments-frontend.zip $INIT_CWD/dist",
     "copy": "cp -r ./src/* ./dist/",
     "zip": "mv dist appointments && cd appointments && bestzip ../appointments-${npm_package_version}.zip *",
-    "build": "npm run clean && npm run download && npm run unzip && npm run copy && npm run zip"
+    "build": "npm run clean && npm run unzip && npm run copy && npm run zip"
   },
   "dependencies": {},
   "keywords": [
