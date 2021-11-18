@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf ./appointments",
-    "unzip": "extract-zip ./dependencies/openmrs-module-appointments-frontend.zip $INIT_CWD/dist",
+    "unzip": "extract-zip ./dependencies/openmrs-module-appointments-frontend.zip",
     "copy": "cp -r ./src/* ./dist/",
     "zip": "mv dist appointments && cd appointments && bestzip ../appointments-${npm_package_version}.zip *",
     "build": "npm run clean && npm run unzip && npm run copy && npm run zip"
