@@ -1,6 +1,6 @@
 {
   "name": "openmrs-owa-bahmni-appointments",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Packages UI of bahmni appointments module as openmrs OWA",
   "main": "index.js",
   "scripts": {
