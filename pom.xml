@@ -4,7 +4,7 @@
 
     <groupId>org.openmrs.owa</groupId>
     <artifactId>appointments</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <packaging>pom</packaging>
     <name>openmrs-owa-appointments</name>
     <description>OpenMRS Order Entry OWA</description>
